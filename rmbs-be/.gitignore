@@ -1,0 +1,56 @@
+# Python-related
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.pdb
+*.log
+
+# Virtual environment
+venv/
+.env/
+*.env
+
+# IDEs and Editors
+.vscode/
+.idea/
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Pytest
+.cache/
+*.cover
+*.hypothesis/
+*.tox/
+
+# Database files (if using SQLite)
+*.sqlite3
+
+# Configuration files
+*.env
+*.ini
+*.json
+
+# Docker
+docker-compose.yml
+Dockerfile
+
+# Logs
+*.log
+
+# Node.js (if using for front-end or backend)
+node_modules/
+
+# Coverage reports
+.coverage
+coverage.xml
+*.cover
+
+# Dependencies
+requirements.txt
+Pipfile.lock
+
+# System Files
+.DS_Store  # macOS
+Thumbs.db  # Windows
