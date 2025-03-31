@@ -18,6 +18,7 @@
 ```bash
   python -m uvicorn main:app --reload --port 8001
 ```
+5. Use postman collection to test the APIs directly
 
 
 ## Start Frontend
@@ -34,3 +35,10 @@
 ```bash
   npm run dev
 ```
+5. Add mortgages
+6. Go back to listing page
+7. Calculate credit rating
+8. Delete unwanted mortgage data if needed
+
+## TODO
+1. Implement edit mortgage

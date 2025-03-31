@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Dialog, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CloseIcon from '@mui/icons-material/Close';
 
 const MortgageList = () => {
   const [mortgages, setMortgages] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [creditRating, setCreditRating] = useState('');
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [mortgageToDelete, setMortgageToDelete] = useState(null);
 
   useEffect(() => {
     fetch('http://localhost:8002/api/mortgages')
@@ -47,6 +51,31 @@ const MortgageList = () => {
     setCreditRating('');
   };
 
+  const handleOpenDeleteDialog = (mortgage) => {
+    setMortgageToDelete(mortgage);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteConfirmationOpen(false);
+    setMortgageToDelete(null);
+  };
+
+  const handleDeleteMortgage = () => {
+    if (mortgageToDelete) {
+      fetch(`http://127.0.0.1:8002/api/mortgages/${mortgageToDelete.id}`, {
+        method: 'DELETE',
+      })
+        .then((response) => {
+          if (response.ok) {
+            handleCloseDeleteDialog();
+            setMortgages(mortgages.filter((mortgage) => mortgage.id !== mortgageToDelete.id));
+          }
+        })
+        .catch((error) => console.error('Error deleting mortgage:', error));
+    }
+  };
+
   return (
     <div style={{ padding: '2rem' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -56,6 +85,7 @@ const MortgageList = () => {
             variant="contained"
             color="primary"
             onClick={calculateCreditRating}
+            style={{ width: 'fit-content' }}
           >
             Calculate Credit Rating
           </Button>
@@ -73,6 +103,7 @@ const MortgageList = () => {
               <TableCell>Debt Amount</TableCell>
               <TableCell>Loan Type</TableCell>
               <TableCell>Property Type</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -86,11 +117,16 @@ const MortgageList = () => {
                   <TableCell>{mortgage.debt_amount}</TableCell>
                   <TableCell>{mortgage.loan_type}</TableCell>
                   <TableCell>{mortgage.property_type}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => handleOpenDeleteDialog(mortgage)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={7} align="center">
+                <TableCell colSpan={8} align="center">
                   No mortgages available.
                 </TableCell>
               </TableRow>
@@ -109,17 +145,39 @@ const MortgageList = () => {
         Add Mortgage
       </Button>
 
+      <Dialog open={deleteConfirmationOpen} onClose={handleCloseDeleteDialog}>
+        <DialogTitle>
+          Are you sure you want to delete this mortgage?
+          <IconButton
+            edge="end"
+            onClick={handleCloseDeleteDialog}
+          >
+            <CloseIcon />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleDeleteMortgage}
+            style={{ marginRight: '1rem' }}
+          >
+            Yes
+          </Button>
+          <Button variant="contained" onClick={handleCloseDeleteDialog}>
+            No
+          </Button>
+        </DialogContent>
+      </Dialog>
+
       <Dialog open={openDialog} onClose={handleCloseDialog}>
         <DialogTitle>
           Final Credit Rating
           <IconButton
             edge="end"
-            color="inherit"
             onClick={handleCloseDialog}
-            aria-label="close"
-            style={{ position: 'absolute', right: 8, top: 8 }}
           >
-            X
+            <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
