@@ -3,6 +3,7 @@ import { Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRo
 import { Link } from 'react-router-dom';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CloseIcon from '@mui/icons-material/Close';
+import { apiBaseUrl } from '../../utility/constants';
 
 const MortgageList = () => {
   const [mortgages, setMortgages] = useState([]);
@@ -29,7 +30,7 @@ const MortgageList = () => {
       property_type: mortgage.property_type,
     }));
 
-    fetch('http://127.0.0.1:8002/api/mortgages/final_credit_rating', {
+    fetch(`${apiBaseUrl}/mortgages/final_credit_rating`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -63,7 +64,7 @@ const MortgageList = () => {
 
   const handleDeleteMortgage = () => {
     if (mortgageToDelete) {
-      fetch(`http://127.0.0.1:8002/api/mortgages/${mortgageToDelete.id}`, {
+      fetch(`${apiBaseUrl}/mortgages/${mortgageToDelete.id}`, {
         method: 'DELETE',
       })
         .then((response) => {

@@ -1,6 +1,7 @@
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import { TextField, Button, MenuItem, Select, InputLabel, FormControl, FormHelperText } from '@mui/material';
+import { apiBaseUrl } from '../../utility/constants';
 
 const CreateMortgage = () => {
   const validationSchema = Yup.object().shape({
@@ -27,7 +28,7 @@ const CreateMortgage = () => {
           propertyType: ''
         }}
         onSubmit={(values) => {
-          fetch('http://localhost:8002/api/mortgages/create', {
+          fetch(`${apiBaseUrl}/mortgages/create`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
